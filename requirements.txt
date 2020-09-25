@@ -11,5 +11,6 @@ pip==20.2.3
 pycodestyle==2.6.0
 pytz==2020.1
 setuptools==44.1.1
+virtualenv==20.0.31
 wheel==0.35.1
 zipp==1.2.0
