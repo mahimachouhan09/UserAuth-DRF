@@ -36,7 +36,6 @@ from .models import Profile
 from .serializers import ProfileSerializer
 from .utils import create_user_account, get_and_authenticate_user
 
-
 User = get_user_model()
 
 
@@ -95,12 +94,27 @@ class AuthViewSet(viewsets.GenericViewSet):
 
 class ProfileViewSet(generics.UpdateAPIView):
     # permission_classes = (permissions.IsAuthenticated,)
+    # import pdb;pdb.set_trace()
     queryset = Profile.objects.all()
     serializer_class = serializers.ProfileSerializer
+    # lookup_field = 'username'
 
-    # import pdb;pdb.set_trace()
-    # @login_required
-    def get_object(self):
-        queryset = Profile.objects.filter(user=self.request.user)
-        # obj = queryset[0]
-        return queryset
+    def partial_update(self, request, pk=None):
+        serializer = ProfileSerializer(
+            request.user, data=request.data, partial=True)
+        serializer.save()
+        return Response(status=status.HTTP_202_ACCEPTED)
+
+    # # @login_required
+    # def get_object(self):
+    #     queryset = Profile.objects.filter(user=self.request.user.id)
+    #     # obj = queryset[0]
+    #     return queryset
+
+    # def put(self, request, pk, format=None):
+    #     queryset = self.get_object(pk)
+    #     serializer = ProfileSerializer(queryset, data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
